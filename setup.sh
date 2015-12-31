@@ -29,7 +29,7 @@ echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' \
    > /etc/pacman.d/mirrorlist
 
 # run base system.
-pacstrap /mnt base sudo openssh
+pacstrap /mnt base sudo openssh virtualbox-guest-modules
 genfstab -U -p /mnt > /mnt/etc/fstab
 
 # run chroot scripts.
