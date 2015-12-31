@@ -2,27 +2,14 @@
 set -ex
 
 # Create partitions
-#  /dev/sda    : GPT
-#  - /dev/sda1 : 256m,    FAT32(EFI)
-#  - /dev/sda2 : 1024m,   swap
-#  - /dev/sda3 : remains, ext4
-sgdisk -o /dev/sda
-sgdisk            \
-  --new      1::+256m  \
-  --typecode 1:ef00    \
-  --new      2::+1024m \
-  --new      3:::      \
+sgdisk \
+  -n 1::+1m --typecode 1:ef02 \
+  -n 2 \
   /dev/sda
-sgdisk -p /dev/sda
-mkfs.vfat -F32 /dev/sda1
-mkswap         /dev/sda2
-mkfs.ext4      /dev/sda3
+mkfs.ext4 /dev/sda2
 
 # mount partitions
-mount /dev/sda3 /mnt
-mkdir -p /mnt/boot
-mount /dev/sda1 /mnt/boot
-swapon /dev/sda2
+mount /dev/sda2 /mnt
 
 # change mirrorlist
 echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' \

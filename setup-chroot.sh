@@ -2,23 +2,8 @@
 set -ex
 
 # install bootloader
-bootctl --path=/boot install
-cat > /boot/loader/loader.conf << EOF
-default arch
-timeout 0
-editor  0
-EOF
-cat > /boot/loader/entries/arch.conf << EOF
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /initramfs-linux.img
-options root=/dev/sda3 rw
-EOF
-
-cat > /etc/modules-load.d/virtualbox.conf << EOF
-vboxguest
-vboxsf
-EOF
+grub-install --target=i386-pc --recheck /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
 
 # set hostname
 echo vagrant-archlinux > /etc/hostname
