@@ -1,0 +1,12 @@
+name:    vagrant-archlinux
+type:    ArchLinux (64bit)
+ram:     765 #MB
+storage:
+  - type:    vmdk
+    size:    32 #GB
+    dynamic: true
+network:
+  - type: NAT
+    forwarding:
+      - host-port:  2222
+        guest-port: 22
