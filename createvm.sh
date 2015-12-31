@@ -1,4 +1,6 @@
 #!/bin/sh
+# 指定した構成で仮想マシンを作成し，detachable startで起動
+
 set -ex
 
 mname=vagrant-archlinux
@@ -45,11 +47,13 @@ VBoxManage storagectl $mname \
 VBoxManage storageattach $mname \
   --storagectl SATA \
   --port 1 \
-  --type hdd \
-  --medium "$hddpath"
+  --type dvddrive \
+  --medium "$dvdpath"
 
 VBoxManage storageattach $mname \
   --storagectl SATA \
   --port 2 \
-  --type dvddrive \
-  --medium "$dvdpath"
+  --type hdd \
+  --medium "$hddpath"
+
+VBoxManage startvm $mname --type separate
