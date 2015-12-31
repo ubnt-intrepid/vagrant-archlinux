@@ -12,7 +12,6 @@ VBoxManage createvm --name $mname --register
 
 VBoxManage modifyvm $mname \
   --ostype ArchLinux_64 \
-  --firmware efi \
   --memory 768 \
   --acpi   on \
   --ioapic on \

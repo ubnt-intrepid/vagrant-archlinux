@@ -15,3 +15,11 @@ root@archiso ~ # poweroff
 ```
 
 メディアを削除したら終わり
+
+## VagrantBoxの作成
+
+```
+$ vagrant package --base vagrant-archlinux --output arch64.box
+$ vagrant box add arch64 arch64.box
+$ rm arch64.box
+```
