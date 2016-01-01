@@ -34,17 +34,11 @@ chmod 700 /home/vagrant/.ssh
 echo "UseDNS no" >> /etc/sshd_config
 
 # enable network settings
-device_name=$(ip addr | grep "^[0-9]"
-                      | awk '{print $2}'
-                      | sed -e 's/://'
-                      | grep -v '^lo$'
-                      | head -n 1)
+device_name=$(ip addr | grep "^[0-9]" | awk '{print $2}' | sed -e 's/://' | grep -v '^lo$' | head -n 1)
 systemctl enable sshd.service
 systemctl enable "dhcpcd@${device_name}.service"
 
 # clear caches
-#pacman -Scc
-#rm /var/lib/dhcpcd/*
-#dd if=/dev/zero of=/EMPTY bs=1M
-#rm /EMPTY
-#history -c
+pacman -Scc
+dd if=/dev/zero of=/EMPTY bs=1M
+rm /EMPTY
