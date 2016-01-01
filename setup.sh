@@ -21,8 +21,10 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # change mirrorlist
-echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' \
-   > /etc/pacman.d/mirrorlist
+mv /etc/pacman.d/mirrorlist{,.bak}
+echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch'    >> /etc/pacman.d/mirrorlist
+echo 'Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist
 
 # install base system
 pacstrap /mnt ${packages[@]}

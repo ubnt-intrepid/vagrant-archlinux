@@ -4,7 +4,7 @@ set -ex
 mname=vagrant-archlinux
 mpath="$HOME/VirtualBox VMs/$mname/${mname}.vbox"
 hddpath="$HOME/VirtualBox VMs/$mname/${mname}.vdi"
-dvdpath="$PWD/archlinux-2015.12.01-dual.iso"
+dvdpath="$PWD/archlinux-2016.01.01-dual.iso"
 
 
 VBoxManage createvm \
