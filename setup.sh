@@ -1,4 +1,13 @@
 #!/bin/sh
+# vim: ft=sh ts=2 sw=2 et :
+
+packages=(
+  base base-devel grub
+  virtualbox-guest-modules
+  openssh
+  git zsh python vim-python3
+)
+
 set -ex
 
 # Create partitions
@@ -15,14 +24,13 @@ mount /dev/sda2 /mnt
 echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' \
    > /etc/pacman.d/mirrorlist
 
-# run base system.
-pacstrap /mnt base sudo openssh virtualbox-guest-modules grub
+# install base system
+pacstrap /mnt ${array[@]}
 genfstab -U -p /mnt > /mnt/etc/fstab
 
-# run chroot scripts.
+# enter target environment and run setup scripts
 cp ./setup-chroot.sh /mnt
 chmod +x /mnt/setup-chroot.sh
 arch-chroot /mnt /setup-chroot.sh
 rm /mnt/setup-chroot.sh
 
-echo "Done installation."
