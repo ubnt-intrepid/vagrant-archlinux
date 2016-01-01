@@ -39,6 +39,6 @@ systemctl enable sshd.service
 systemctl enable "dhcpcd@${device_name}.service"
 
 # clear caches
-pacman -Scc
+pacman -Scc < yes
 dd if=/dev/zero of=/EMPTY bs=1M
 rm /EMPTY
