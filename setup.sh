@@ -25,7 +25,7 @@ echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' \
    > /etc/pacman.d/mirrorlist
 
 # install base system
-pacstrap /mnt ${array[@]}
+pacstrap /mnt ${packages[@]}
 genfstab -U -p /mnt > /mnt/etc/fstab
 
 # enter target environment and run setup scripts
