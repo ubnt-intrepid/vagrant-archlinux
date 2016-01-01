@@ -1,25 +1,25 @@
-## 仮想マシンの起動
+# ArchLinux Vagrant box 作成用スクリプト
+
+## 仮想マシンの作成
 
 ```
-$ ./createvm.sh  # 仮想マシンを作成し，detach modeで起動
+host% git clone https://github.com/ys-nuem/vagrant-archlinux
+host% cd vagrant-archlinux
+host% ln -s /path/to/archlinux-2015.12.01-dual.iso $PWD
+host% ./createvm.sh
 ```
 
 ## インストールの実行
-
-インストール用のスクリプトをダウンロードし実行する
 ```
-root@archiso ~ # curl https://hogehoge.com/path/to/setup.sh > setup.sh
-root@archiso ~ # curl https://hogehoge.com/path/to/setup-chroot.sh > setup-chroot.sh
-root@archiso ~ # sh setup.sh
+root@archiso ~ # curl -L "https://raw.githubusercontent.com/ys-nuem/vagrant-archlinux/master/autorun.sh" | bash
+root@archiso ~ # ...
 root@archiso ~ # poweroff
 ```
-
-メディアを削除したら終わり
 
 ## VagrantBoxの作成
 
 ```
-$ vagrant package --base vagrant-archlinux --output arch64.box
-$ vagrant box add arch64 arch64.box
-$ rm arch64.box
+host% vagrant package --base vagrant-archlinux --output arch64.box
+host% vagrant box add arch64 arch64.box
+host% rm arch64.box
 ```
