@@ -32,7 +32,6 @@ cat > /etc/modules-load.d/virtualbox.conf << EOF
 vboxguest
 vboxsf
 EOF
-groupadd vboxsf
 gpasswd -a vagrant vboxsf
 systemctl enable vboxservice
 
@@ -50,5 +49,6 @@ systemctl enable "dhcpcd@${device_name}.service"
 
 # clear caches
 yes | pacman -Scc
-dd if=/dev/zero of=/EMPTY bs=1M
-rm /EMPTY
+dd if=/dev/zero of=empty bs=1M
+rm -f empty
+

@@ -3,7 +3,7 @@ set -ex
 
 mname=vagrant-archlinux
 mpath="$HOME/VirtualBox VMs/$mname/${mname}.vbox"
-hddpath="$HOME/VirtualBox VMs/$mname/${mname}.vdi"
+hddpath="$HOME/VirtualBox VMs/$mname/${mname}.vmdk"
 dvdpath="$PWD/archlinux-2016.01.01-dual.iso"
 
 
@@ -35,7 +35,7 @@ VBoxManage modifyvm $mname \
 VBoxManage createhd \
   --size     32768 \
   --variant  Standard \
-  --format   vdi \
+  --format   vmdk \
   --filename "$hddpath"
 
 VBoxManage storagectl $mname \
