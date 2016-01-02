@@ -3,7 +3,7 @@
 
 packages=(
   base base-devel grub
-  virtualbox-guest-modules
+  virtualbox-guest-utils
   openssh
   git zsh python vim-python3
 )

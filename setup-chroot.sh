@@ -34,6 +34,7 @@ vboxsf
 EOF
 groupadd vboxsf
 gpasswd -a vagrant vboxsf
+systemctl enable vboxservice
 
 # add SSH settings
 mkdir -p /home/vagrant/.ssh
