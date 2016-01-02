@@ -26,11 +26,20 @@ Defaults env_keep += "SSH_AUTH_SOCK"
 EOF
 chmod 0440 /etc/sudoers.d/vagrant
 
+# shared folder settings
+modprobe -a vboxguest vboxsf
+cat > /etc/modules-load.d/virtualbox.conf << EOF
+vboxguest
+vboxsf
+EOF
+groupadd vboxsf
+gpasswd -a vagrant vboxsf
+
 # add SSH settings
 mkdir -p /home/vagrant/.ssh
 curl -L "https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub" \
    > /home/vagrant/.ssh/authorized_keys
-chmod 700 /home/vagrant/.ssh
+chmod 755 /home/vagrant/.ssh
 echo "UseDNS no" >> /etc/sshd_config
 
 # enable network settings
