@@ -1,10 +1,11 @@
 #!/bin/sh
 set -ex
 
+dvdpath="$PWD/arch.iso"
+
 mname=vagrant-archlinux
 mpath="$HOME/VirtualBox VMs/$mname/${mname}.vbox"
 hddpath="$HOME/VirtualBox VMs/$mname/${mname}.vmdk"
-dvdpath="$PWD/archlinux-2016.01.01-dual.iso"
 
 
 VBoxManage createvm \
@@ -56,5 +57,3 @@ VBoxManage storageattach $mname \
   --type        dvddrive \
   --medium      "$dvdpath"
 
-# run virtual machine
-VBoxManage startvm $mname --type separate
