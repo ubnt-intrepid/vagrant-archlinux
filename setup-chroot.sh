@@ -39,7 +39,9 @@ systemctl enable vboxservice
 mkdir -p /home/vagrant/.ssh
 curl -L "https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub" \
    > /home/vagrant/.ssh/authorized_keys
-chmod 755 /home/vagrant/.ssh
+chmod 755 /home/vagrant
+chmod 700 /home/vagrant/.ssh
+chmod 600 /home/vagrant/.ssh/authorized_keys
 echo "UseDNS no" >> /etc/sshd_config
 
 # enable network settings
@@ -49,6 +51,6 @@ systemctl enable "dhcpcd@${device_name}.service"
 
 # clear caches
 yes | pacman -Scc
-dd if=/dev/zero of=empty bs=1M
+dd if=/dev/zero of=empty bs=1M && echo
 rm -f empty
 

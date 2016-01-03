@@ -3,7 +3,7 @@
 
 packages=(
   base base-devel grub
-  virtualbox-guest-utils
+  virtualbox-guest-utils-nox
   openssh
   git zsh python vim-python3
 )
@@ -36,3 +36,4 @@ chmod +x /mnt/setup-chroot.sh
 arch-chroot /mnt /setup-chroot.sh
 rm /mnt/setup-chroot.sh
 
+poweroff
