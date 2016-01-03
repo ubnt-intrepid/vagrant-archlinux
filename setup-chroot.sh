@@ -3,9 +3,21 @@
 
 set -ex
 
-# install bootloader
-grub-install --target=i386-pc --recheck /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+# journaldの設定を復旧
+sed -i 's/Storage=volatile/#Storage=auto/' /etc/systemd/journald.conf
+# 特殊なudevルールの削除
+rm -f /etc/udev/rules.d/81-dhcpcd.rules
+# archisoによって作成されたサービスの無効化と削除
+systemctl disable pacman-init.service choose-mirror.service
+rm -r /etc/systemd/system/{choose-mirror.service,pacman-init.service,etc-pacman.d-gnupg.mount,getty@tty1.service.d}
+rm -f /etc/systemd/scripts/choose-mirror
+# ライブ環境の特殊なスクリプトを削除
+rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
+rm -f /root/{.automated_script.sh,.zlogin}
+rm -f /etc/mkinitcpio-archiso.conf
+rm -r /etc/initcpip
+# Initial ramdisk 環境の作成
+mkinitcpio -o linux
 
 # set hostname
 echo archlinux > /etc/hostname
@@ -46,6 +58,10 @@ echo "UseDNS no" >> /etc/sshd_config
 device_name=$(ip addr | grep "^[0-9]" | awk '{print $2}' | sed -e 's/://' | grep -v '^lo$' | head -n 1)
 systemctl enable sshd.service
 systemctl enable "dhcpcd@${device_name}.service"
+
+# install bootloader
+grub-install --target=i386-pc --recheck /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
 
 # clear caches
 yes | pacman -Scc

@@ -1,3 +1,4 @@
 *.iso
-archlinux-2016.01.01-dual.iso.sig
-package.box
+*.box
+*.iso.sig
+*.log
