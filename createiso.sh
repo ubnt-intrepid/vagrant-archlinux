@@ -6,4 +6,5 @@ cd mkarchiso/
 sudo ./build.sh -v
 cd ..
 
-ln -s ./arch-installer/out/*.iso ./arch.iso
+rm -f ./arch.iso
+ln -s ./mkarchiso/out/*.iso ./arch.iso

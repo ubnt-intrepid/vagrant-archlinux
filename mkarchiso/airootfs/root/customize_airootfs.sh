@@ -23,5 +23,5 @@ systemctl enable pacman-init.service choose-mirror.service
 systemctl set-default multi-user.target
 
 systemctl enable sshd.service
-sed -i 's/#\(PermitEmptyPasswords \).\+/\1yes/'  /etc/ssh/sshd_config
-sed -i 's/#\(PasswordAuthentication \).\+/\1yes' /etc/ssh/sshd_config
+echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+echo 'PermitEmptyPasswords yes'   >> /etc/ssh/sshd_config
