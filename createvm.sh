@@ -13,6 +13,7 @@ VBoxManage createvm \
   --register
 VBoxManage modifyvm $mname \
   --ostype          ArchLinux_64 \
+  --firmware        efi \
   --memory          768 \
   --acpi            on \
   --ioapic          on \
@@ -48,12 +49,11 @@ VBoxManage storagectl $mname \
 VBoxManage storageattach $mname \
   --storagectl  SATA \
   --port        1 \
-  --type        hdd \
-  --medium      "$hddpath"
+  --type        dvddrive \
+  --medium      "$dvdpath"
 
 VBoxManage storageattach $mname \
   --storagectl  SATA \
   --port        2 \
-  --type        dvddrive \
-  --medium      "$dvdpath"
-
+  --type        hdd \
+  --medium      "$hddpath"
