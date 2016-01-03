@@ -15,14 +15,15 @@ rm -f /etc/systemd/scripts/choose-mirror
 rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 rm -f /root/{.automated_script.sh,.zlogin}
 rm -f /etc/mkinitcpio-archiso.conf
-rm -r /etc/initcpip
+rm -r /etc/initcpio
 # Initial ramdisk 環境の作成
-mkinitcpio -o linux
+mkinitcpio -p linux
 
 # set hostname
 echo archlinux > /etc/hostname
 
 # set locale settings
+rm -f /etc/localtime
 ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 sed -i.bak -e 's/#\(en_US.UTF-8.*\)/\1/' /etc/locale.gen
 rm /etc/locale.gen.bak
