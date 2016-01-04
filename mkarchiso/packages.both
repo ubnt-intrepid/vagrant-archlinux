@@ -4,7 +4,3 @@ base-devel
 grub
 virtualbox-guest-utils-nox
 openssh
-git
-zsh
-python
-vim-python3

@@ -4,11 +4,12 @@
 set -ex
 
 echo "Update GPG Keys"
-sudo pacman-key --init
-sudo pacman-key --populate archlinux
+pacman-key --init
+pacman-key --populate archlinux
 
-echo "Install My dotfiles"
-echo 'vagrant' | su - vagrant
+echo "Install additional dependencies"
+pacman -S zsh vim
+su - vagrant
 curl -L https://raw.githubusercontent.com/ys-nuem/dotfiles/master/install.sh \
   | bash
 

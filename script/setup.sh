@@ -1,13 +1,6 @@
 #!/bin/sh
 # vim: ft=sh ts=2 sw=2 et :
 
-#packages=(
-#  base base-devel grub
-#  virtualbox-guest-utils-nox
-#  openssh
-#  git zsh python vim-python3
-#)
-
 set -ex
 
 # Create partitions
@@ -21,18 +14,14 @@ mkfs.ext4 /dev/sda2
 mount /dev/sda2 /mnt
 
 # change mirrorlist
-mv /etc/pacman.d/mirrorlist{,.bak}
-echo 'Server = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch'    >> /etc/pacman.d/mirrorlist
-echo 'Server = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-cat /etc/pacman.d/mirrorlist.bak >> /etc/pacman.d/mirrorlist
+sed -e '1iServer = http://ftp.jaist.ac.jp/pub/Linux/ArchLinux/$repo/os/$arch' -i /etc/pacman.d/mirrorlist
+sed -e '1iServer = http://ftp.tsukuba.wide.ad.jp/Linux/archlinux/$repo/os/$arch' -i /etc/pacman.d/mirrorlist
 
-# install base system
-#pacstrap /mnt ${packages[@]}
-# pacstrapを使わずライブ環境からファイルをコピーする
-time cp -ax / /mnt
-# カーネルイメージをコピーする
+# copy base system and kernel images {{{
+cp -ax / /mnt
 cp -vaT /run/archiso/bootmnt/arch/boot/$(uname -m)/vmlinuz /mnt/boot/vmlinuz-linux
-
+# }}}
+# generate /etc/fstab from mouned conditions
 genfstab -U -p /mnt > /mnt/etc/fstab
 
 # enter target environment and run setup scripts

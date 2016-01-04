@@ -3,8 +3,10 @@
 mname="vagrant-archlinux"
 mpath="$HOME/VirtualBox VMs/$mname/${mname}.vbox"
 hddpath="$HOME/VirtualBox VMs/$mname/${mname}.vmdk"
-
 dvdpath="$PWD/arch.iso"
+
+SCP="scp -P 2222 -oStrictHostKeyChecking=no"
+SSH="ssh -p 2222 -oStrictHostKeyChecking=no"
 
 set -ex
 
@@ -62,22 +64,26 @@ VBoxManage storageattach $mname \
 
 # [Step3] install Archlinux {{{
 # start virtual machine {{{
-VBoxManage startvm $mname --type headless
-sleep 90s #}}}
+VBoxManage startvm $mname --type headless #}}}
 
-# copy and run install scripts
-scp -P 2222 -oStrictHostKeyChecking=no ./script/* root@localhost:/root
-ssh -p 2222 -oStrictHostKeyChecking=no root@localhost \
-    './setup.sh 2>&1 | tee install.log'
-scp -P 2222 -oStrictHostKeyChecking=no root@localhost:/root/install.log \
-    ./install.log # }}}
+sleep 90s
 
-# halt target machine {{{
-ssh -p 2222 -oStrictHostKeyChecking=no root@localhost 'poweroff' || echo
+# copy and run install scripts {{{
+$SCP ./script/* root@localhost:/root
+$SSH root@localhost './setup.sh 2>&1 | tee install.log'
+$SCP root@localhost:/root/install.log ./install.log
+$SSH root@localhost 'poweroff' && echo #}}}
+
 sleep 30s
-VBoxManage modifyvm $mname --firmware bios #}}}
+# }}}
 
 # [Step4] create vagrant box {{{
+# modify VM {{{
+VBoxManage modifyvm $mname --firmware bios
+VBoxManage modifyvm $mname --natpf1 delete rule1
+VBoxManage storageattach $mname \
+  --storagectl SATA --port 1 --type dvddrive --medium none #}}}
+
 rm -f package.box
 vagrant package --base $mname --output package.box
 # }}}

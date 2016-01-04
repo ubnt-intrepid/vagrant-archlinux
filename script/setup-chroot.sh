@@ -16,8 +16,12 @@ rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 rm -f /root/{.automated_script.sh,.zlogin}
 rm -f /etc/mkinitcpio-archiso.conf
 rm -r /etc/initcpio
-# Initial ramdisk 環境の作成
 mkinitcpio -p linux
+
+# remove unnecessary packages
+yes | pacman -Rs haveged intel-ucode memtest86+ \
+  mkinitcpio-nfs-utils nbd zsh syslinux prebootloader \
+  arch-install-scripts gptfdisk
 
 # set hostname
 echo archlinux > /etc/hostname
@@ -30,7 +34,7 @@ rm /etc/locale.gen.bak
 locale-gen
 
 # make user & set passwd
-useradd -m -G wheel -s /bin/zsh vagrant
+useradd -m -G wheel -s /bin/bash vagrant
 echo -e 'vagrant\nvagrant\n' | passwd
 echo -e 'vagrant\nvagrant\n' | passwd vagrant
 cat << EOF > /etc/sudoers.d/vagrant
@@ -62,6 +66,7 @@ systemctl enable "dhcpcd@${device_name}.service"
 
 # install bootloader
 grub-install --target=i386-pc --recheck /dev/sda
+sed -i 's/\(GRUB_TIMEOUT\)=\(.*\)/\1=0/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # clear caches
