@@ -4,6 +4,8 @@
 
 ```
 $ ./build.sh
-$ vagrant box add package.box arch64-1
-```
+$ ln -sf `realpath package.box` /tmp/arch64
 
+$ cd ./template/
+$ vagrant up
+```

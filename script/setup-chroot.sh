@@ -3,6 +3,7 @@
 
 set -ex
 
+# archiso由来の設定を削除 {{{
 # journaldの設定を復旧
 sed -i 's/Storage=volatile/#Storage=auto/' /etc/systemd/journald.conf
 # 特殊なudevルールの削除
@@ -16,24 +17,22 @@ rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
 rm -f /root/{.automated_script.sh,.zlogin}
 rm -f /etc/mkinitcpio-archiso.conf
 rm -r /etc/initcpio
-mkinitcpio -p linux
 
-# remove unnecessary packages
-yes | pacman -Rs haveged intel-ucode memtest86+ \
+yes | pacman -Rs intel-ucode memtest86+ \
   mkinitcpio-nfs-utils nbd zsh syslinux prebootloader \
   arch-install-scripts gptfdisk
+# }}}
 
 # set hostname
 echo archlinux > /etc/hostname
 
 # set locale settings
-rm -f /etc/localtime
-ln -s /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 sed -i.bak -e 's/#\(en_US.UTF-8.*\)/\1/' /etc/locale.gen
 rm /etc/locale.gen.bak
 locale-gen
 
-# make user & set passwd
+# settings of account
 useradd -m -G wheel -s /bin/bash vagrant
 echo -e 'vagrant\nvagrant\n' | passwd
 echo -e 'vagrant\nvagrant\n' | passwd vagrant
@@ -65,12 +64,17 @@ systemctl enable sshd.service
 systemctl enable "dhcpcd@${device_name}.service"
 
 # install bootloader
+mkinitcpio -p linux
 grub-install --target=i386-pc --recheck /dev/sda
 sed -i 's/\(GRUB_TIMEOUT\)=\(.*\)/\1=0/' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
+
+# pacman-keyの初期化
+haveged -w 1024   # make entropy
+pacman-key --init
+pacman-key --populate archlinux
 
 # clear caches
 yes | pacman -Scc
 dd if=/dev/zero of=empty bs=1M && echo
 rm -f empty
-
