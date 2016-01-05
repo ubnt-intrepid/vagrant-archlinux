@@ -66,7 +66,11 @@ VBoxManage storageattach $mname \
 # start virtual machine {{{
 VBoxManage startvm $mname --type headless #}}}
 
-sleep 90s
+while true; do
+  $SSH root@localhost echo >/dev/null 2>/dev/null
+  if [[ $? -eq 0 ]]; then break; fi
+  sleep 5s
+done
 
 # copy and run install scripts {{{
 $SCP ./script/* root@localhost:/root
@@ -74,7 +78,11 @@ $SSH root@localhost './setup.sh 2>&1 | tee install.log'
 $SCP root@localhost:/root/install.log ./install.log
 $SSH root@localhost 'poweroff' && echo #}}}
 
-sleep 30s
+while true; do
+  ret=$(VBoxManage list runningvms | grep $mname)
+  if [[ ${#ret} -eq 0 ]]; then break; fi
+  sleep 5s
+done
 # }}}
 
 # [Step4] create vagrant box {{{
