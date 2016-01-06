@@ -1,6 +1,6 @@
 arch-install-scripts
 gptfdisk
-base-devel
 grub
+sudo
 virtualbox-guest-utils-nox
 openssh

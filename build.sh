@@ -79,9 +79,9 @@ $SCP root@localhost:/root/install.log ./install.log
 $SSH root@localhost 'poweroff' && echo #}}}
 
 while true; do
-  ret=$(VBoxManage list runningvms | grep $mname)
-  if [[ ${#ret} -eq 0 ]]; then break; fi
-  sleep 5s
+  ret=$(VBoxManage list runningvms | grep $mname | wc -l | sed -e 's/ //')
+  if [[ $ret -eq 0 ]]; then break; fi
+  sleep 1s
 done
 # }}}
 
