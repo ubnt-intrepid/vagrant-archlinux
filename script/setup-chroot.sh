@@ -42,6 +42,9 @@ vagrant ALL=(ALL) NOPASSWD: ALL
 Defaults env_keep += "SSH_AUTH_SOCK"
 EOF
 chmod 0440 /etc/sudoers.d/vagrant
+echo "UseDNS no" >> /etc/sshd_config
+echo 'sshd: ALL' > /etc/hosts.allow
+echo 'ALL: ALL' > /etc/hosts.deny
 
 # shared folder settings
 modprobe -a vboxguest vboxsf
@@ -53,11 +56,10 @@ gpasswd -a vagrant vboxsf
 systemctl enable vboxservice
 
 # add SSH settings
-mkdir -p /home/vagrant/.ssh
-curl -L "https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub" \
-   > /home/vagrant/.ssh/authorized_keys
-chmod 755 /home/vagrant/.ssh
-echo "UseDNS no" >> /etc/sshd_config
+mkdir -m 700 -p /home/vagrant/.ssh
+curl -L "https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub" -o /home/vagrant/.ssh/authorized_keys
+chmod 600 /home/vagrant/.ssh/authorized_keys
+chown -R vagrant:vagrant /home/vagrant/.ssh
 
 # enable network settings
 device_name=$(ip addr | grep "^[0-9]" | awk '{print $2}' | sed -e 's/://' | grep -v '^lo$' | head -n 1)
